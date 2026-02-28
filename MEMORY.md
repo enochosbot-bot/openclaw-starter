@@ -1,36 +1,57 @@
 # MEMORY.md — Long-Term Memory
 
 ## Who I Am
-- **Name:** _(agent name)_
-- **Born:** _(date)_
-- **Human:** _(operator name + contact)_
+- **Name:** [agent name]
+- **Born:** [first day online]
+- **Human:** [operator name + Telegram handle]
 
 ## Infrastructure
-- _(machine specs)_
-- _(Telegram bot handle)_
-- _(API keys configured — list services, not values)_
-- _(tunneling solution — Tailscale / ngrok / etc.)_
+- Mac mini (Darwin arm64) — primary host
+- Telegram bot for all comms
+- APIs configured: Anthropic (main model), OpenAI (STT/TTS, voice: onyx), ElevenLabs (voice)
+- Tunneling: Tailscale preferred over ngrok (ngrok dies on restart)
+- Google Drive: auto-backup every 6 hours
 
 ## Agent Architecture
-- **Main agent** — handles all DMs + command center
-- **Scribe** — research, writing, dossiers. Dispatched by main. No code, no comms.
-- **Coder** — builds scripts/apps/tools. Ships working code. No research, no comms.
-- _(Add more agents as you build out the fleet)_
+- **Main** — command center, all DMs. Reads MEMORY.md every session.
+- **Scribe (Ezra)** — research, writing, dossiers. Workspace: `~/.openclaw/workspace-scribe/`. No code, no comms, no config.
+- **Coder (Bezzy)** — scripts, apps, site builds. Workspace: `~/.openclaw/workspace-coder/`. No research, no comms.
+- **Researcher (Berean)** — web search, synthesis, daily briefs.
+- **Observer (Gideon)** — security audits, nightly scans, health checks.
+- **QA (Basher/Nehemiah)** — smoke tests, output QA after coder ships.
 
-## Operating Heuristics
-Three rules baked into AGENTS.md:
-1. **Context Recovery Intelligence** — detect same-session / post-compaction / cold-start BEFORE searching
-2. **Plan Phase Prerequisite Validation** — validate ENV, DEPS, STATE, FILES before executing multi-step plans
-3. **Breadth vs Depth Parallelization** — files <3 = single agent, >5 = parallel. Skip agent if working memory covers >80%
+## Automation Stack
+21 crons running. Key ones:
+- **Mission Pulse** — 9/12/15/18/21 CST — proactive check-in when idle
+- **Morning Brief** — 8AM daily
+- **X Bookmarks Sync** — 4AM nightly
+- **Nightly Maintenance + Security** — 3AM
+- **Nehemiah QA** — smoke test at 6:30AM, output QA 3x/day
+Full list: `ops/cron-registry.md`
+
+## Key Integrations
+- Obsidian (`~/Documents/Brain/`) — canon for all research, people, decisions
+- Google Drive — workspace backup
+- X/Twitter — daily bookmarks sync, OAuth active
+- YouTube — upload pipeline, OAuth configured
 
 ## Lessons Learned
-_(This section grows over time. Start with what you've already learned from other AI tools.)_
+- Config patches defer during active replies — always restart after
+- ngrok must be run fully detached (nohup + disown)
+- Telegram forum topics need threadId param
+- Long pasted content arrives in multiple messages — wait for the full thing before responding
+- Tool errors in Telegram need immediate plain-English follow-up — no exceptions
+- Obsidian is canon — research dies in chat, it lives in Brain/
 
-## Active Projects
-_(High-level list of what's in flight — details live in Obsidian)_
+## Operating Heuristics
+1. **Context Recovery** — detect same-session / post-compaction / cold-start before searching
+2. **Plan Validation** — check ENV, DEPS, STATE, FILES before any multi-step work
+3. **Parallelization** — <3 files = single agent, >5 files = parallel agents
 
 ## Preferences
-_(Operational preferences that don't fit elsewhere)_
+- No email crons
+- Always verify live URL before reporting deploy done
+- One comprehensive response per topic — don't repeat
 
 ## Queued Work
-_(Backlog items that haven't made it to ops/production-queue.md yet)_
+_(Move items here from ops/production-queue.md when in-progress)_
