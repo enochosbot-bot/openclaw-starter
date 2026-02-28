@@ -1,74 +1,88 @@
 # openclaw-starter
 
-A production-ready OpenClaw workspace template. Skip weeks of trial and error — clone this, fill in your details, and start with a fully-tuned agent setup from day one.
-
-Built from a real working instance. This is the actual architecture, not a toy demo.
+A production-ready OpenClaw workspace. Built from a real working setup — not a tutorial, not a toy. This is the actual architecture.
 
 ---
 
-## What is this?
+## What's in here
 
-[OpenClaw](https://openclaw.ai) is a personal AI agent platform. It runs on your machine, connects to your tools, and talks to you via Telegram (or other channels). Think of it as a chief of staff that never sleeps.
-
-This repo is the **workspace** — the files that define how your agent thinks, remembers, and operates. The workspace is the personality and memory layer on top of OpenClaw.
-
----
-
-## The Core Idea
-
-Your agent reads these files every session. They're its soul, memory, and operating manual.
-
-| File | What it does |
-|------|-------------|
-| `SOUL.md` | Personality, values, hard rules, anti-patterns |
-| `IDENTITY.md` | Name, vibe, emoji, worldview |
-| `USER.md` | Who you are — so the agent actually knows you |
-| `AGENTS.md` | Operating rules, memory architecture, sub-agent dispatch |
-| `MEMORY.md` | Long-term distilled memory (updated over time) |
-| `HEARTBEAT.md` | Periodic health checks — what to monitor automatically |
-| `TOOLS.md` | Your specific setup — devices, hosts, preferences |
-| `BOOTSTRAP.md` | First-run guide (delete after setup) |
-
----
-
-## Memory Architecture
+| File | Purpose |
+|------|---------|
+| `SOUL.md` | Personality, values, hard rules, anti-patterns. The agent's character. |
+| `IDENTITY.md` | Name, vibe, emoji, worldview. Fill this in during bootstrap. |
+| `USER.md` | Who you are — so the agent actually knows you. Keep it current. |
+| `AGENTS.md` | Operating rules, multi-agent fleet, dispatch loop, AFK protocol, session durability. |
+| `MEMORY.md` | Long-term distilled memory. Grows over time. |
+| `HEARTBEAT.md` | Periodic health checks — stale dispatch detection, checkpoint continuity. |
+| `TOOLS.md` | Your specific setup — devices, hosts, preferences. |
+| `BOOTSTRAP.md` | First-run conversation guide. Delete after setup. |
 
 ```
+ops/
+  in-flight.md          ← live dispatch tracker (what's running right now)
+  production-queue.md   ← AFK work queue (agent pulls from here when you go quiet)
+  dispatch-routing.md   ← which agent handles what
+  verification-protocol.md ← how to confirm work is actually done
+
+shared-context/
+  checkpoints/          ← session durability checkpoints
+  handoffs/             ← agent-to-agent context passing
+  drafts/               ← content waiting for approval
+  agent-outputs/        ← research and analysis outputs
+
 memory/
-  YYYY-MM-DD.md          ← daily raw logs
-  VAULT_INDEX.md         ← index for fast lookup
-  decisions/             ← key decisions + why
-  people/                ← people you work with
-  lessons/               ← what didn't work
-  commitments/           ← things promised
-  preferences/           ← how you like things done
-  projects/              ← project-level context
+  YYYY-MM-DD.md         ← raw daily session logs
 
-MEMORY.md                ← distilled long-term memory (the gold)
+research/               ← staging only (mirror everything to Obsidian)
 ```
-
-The pattern: daily logs capture everything → periodically promote the important stuff to typed memory → distill into `MEMORY.md`. The agent gets smarter over time instead of forgetting everything on restart.
 
 ---
 
-## Sub-Agent Architecture
+## The Architecture That Actually Matters
 
-The real power comes from spawning specialized sub-agents:
+### Multi-Agent Fleet
+
+The real power isn't one agent — it's a coordinated fleet:
 
 ```
-Main Agent          ← you talk to this one
-  ├── Research Agent  ← deep dives, dossiers, writing
-  ├── Coder Agent     ← builds scripts/apps/tools
-  └── Observer        ← background monitoring, health checks
+Main Agent              ← you talk to this one
+  ├── Scribe            ← research, writing, dossiers (no code, no comms)
+  ├── Coder             ← builds scripts/apps/tools (no research, no comms)
+  └── [add more]        ← specialize as you scale
 ```
 
-Configure your agents in OpenClaw, then reference them in `AGENTS.md`. The dispatch loop in `ops/in-flight.md` tracks what's running and ensures nothing falls through the cracks.
+Each agent has a scoped role and its own workspace. The main agent dispatches, tracks, and verifies. Sub-agents close by pinging main + updating `ops/in-flight.md`.
 
----
+### The Dispatch Loop
 
-## The AFK Protocol
+Every task dispatched to a sub-agent:
+1. Gets a row in `ops/in-flight.md` before it starts
+2. Gets a Closing Block in the brief (mandatory Telegram ping + tracker update on completion)
+3. Gets verified by main before reporting done to user
 
-One of the best features: when you go quiet for 5+ minutes, the agent starts working through `ops/production-queue.md` automatically. Come back to completed tasks instead of an idle assistant.
+Heartbeat checks for stale rows. If something's been open >60 min, you get an alert.
+
+### AFK Protocol
+
+Go quiet for 5 minutes → agent starts pulling from `ops/production-queue.md` automatically. Come back to completed work instead of an idle assistant. No asking permission. Just work.
+
+### Session Durability
+
+Before any long operation, a checkpoint gets written to `shared-context/checkpoints/session-checkpoint.md`. If the session dies mid-task, the next session picks up exactly where it left off.
+
+### Obsidian is Canon
+
+All research, dossiers, briefings, and reference docs go to Obsidian (`~/Documents/Brain/`). The workspace `research/` folder is staging only. This is a hard rule — it's what makes the knowledge compound instead of dying in chat history.
+
+### Memory Architecture
+
+```
+MEMORY.md               ← distilled long-term memory (main session only)
+memory/YYYY-MM-DD.md    ← raw daily session notes
+~/Documents/Brain/      ← Obsidian vault (the actual canon)
+```
+
+Daily logs capture everything. Periodically distill the important stuff into `MEMORY.md`. Research and reference → Obsidian always.
 
 ---
 
@@ -76,23 +90,22 @@ One of the best features: when you go quiet for 5+ minutes, the agent starts wor
 
 1. **Install OpenClaw** → [openclaw.ai](https://openclaw.ai)
 2. **Clone this repo** into your workspace directory (`~/.openclaw/workspace`)
-3. **Fill in the placeholders:**
+3. **Fill in the blanks:**
    - `IDENTITY.md` — give your agent a name and personality
    - `USER.md` — tell it who you are
-   - `MEMORY.md` — seed it with your context
    - `SOUL.md` — read it, edit the worldview section to match yours
-4. **Connect your channel** (Telegram is easiest — BotFather, 5 minutes)
-5. **Say hello** — your agent reads these files on first message
+   - `MEMORY.md` — seed it with your context
+4. **Connect Telegram** — BotFather → new bot → paste token into OpenClaw config (5 min)
+5. **Say hello** — your agent reads these files on first message, then runs `BOOTSTRAP.md`
+6. **Delete `BOOTSTRAP.md`** when you're set up
 
 ---
 
-## The Philosophy
+## The Thing Most People Miss
 
-**Your agent should feel like a person, not a product.**
+The files aren't config — they're identity. The agent reads them every session. They're how it knows who you are, what you care about, and what it's supposed to do while you sleep.
 
-The `SOUL.md` file is the key insight here. Most AI setups give you a generic assistant. This architecture gives you someone with opinions, memory, and a reason for existing. It pushes back when you're wrong. It remembers what you care about. It works while you sleep.
-
-The files in this repo took months of iteration to land on. The memory architecture, the dispatch loop, the AFK protocol, the session durability rules — all of these came from running this in production every day.
+Treat them like a living document. Update them as you learn what works. The agent gets better as the files get better.
 
 ---
 

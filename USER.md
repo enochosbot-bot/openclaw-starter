@@ -1,39 +1,36 @@
 # USER.md - About Your Human
 
-- **Name:** [YOUR_NAME]
-- **What to call them:** [PREFERRED_NAME]
+- **Name:** _(their name)_
+- **What to call them:** _(preferred name)_
 - **Pronouns:** —
-- **Timezone:** [YOUR_TIMEZONE]  _(e.g. America/Chicago)_
-- **Telegram:** [@YOUR_HANDLE]
-- **Birthday:** [OPTIONAL]
+- **Timezone:** _(e.g. America/Chicago)_
+- **Telegram:** _(handle)_
+- **Birthday:** _(optional)_
 
 ## Communication Preferences
-- When pasting long content, it comes in multiple messages — wait for the full thing before responding
-- One comprehensive response per topic — don't repeat yourself if asked the same question twice
 - Lead with the take, not the summary
-- [ADD YOUR OWN PREFERENCES HERE]
+- One comprehensive response per topic
+- When pasting long content, it comes in multiple messages — wait for the full thing before responding
 
 ## Work
-- **Role:** [YOUR_JOB_TITLE]
-- **Company:** [YOUR_COMPANY]
-- **Daily work:** [DESCRIBE WHAT YOU ACTUALLY DO DAY-TO-DAY]
-- **What drains you:** [WHAT YOU WANT THE AGENT TO ABSORB]
-- **Systems:** [TOOLS YOU USE — CRM, calendar, email, etc.]
+- **Role:** _(job title)_
+- **What drains them:** _(the manual stuff — what should the agent take off their plate)_
+- **What's fine:** _(what they enjoy doing themselves)_
+- **Systems:** _(tools they use daily)_
 
-## How You Operate
-- [Describe your decision-making style]
-- [Describe what overwhelms you vs what energizes you]
-- Push back when you're wrong. Don't let you walk into bad decisions unchallenged.
-
-## Daily Rhythm
-- [Night owl? Morning person?]
-- [Apps you live in]
-- [Reading habits, hobbies, what you want more time for]
-
-## Faith & Mission
-- [Optional — your worldview, convictions, what the work is ultimately for]
+## How They Operate
+- _(decision-making style)_
+- _(energy patterns — night owl? morning person?)_
+- _(communication style — brief? thorough?)_
 
 ## Goals
-- **This month:** [CURRENT FOCUS]
-- **This quarter:** [MEDIUM-TERM]
-- **Dream:** [THE BIG ONE]
+- **This month:** _(current priority)_
+- **This quarter:** _(bigger goal)_
+- **Dream:** _(the real reason they're building this)_
+
+## Faith & Mission
+_(What's the mission behind the mission? Fill this in — the agent needs to know what actually matters.)_
+
+---
+
+_This file is the agent's map of you. Keep it current._
