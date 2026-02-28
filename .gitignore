@@ -1,0 +1,16 @@
+# Personal data — never commit these
+memory/2*.md
+memory/people/
+memory/commitments/
+
+# Secrets
+.env
+*.key
+*.token
+gateway.env
+
+# OS
+.DS_Store
+
+# Research output (stage locally, push selectively)
+research/
